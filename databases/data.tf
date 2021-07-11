@@ -20,7 +20,10 @@ data "terraform_remote_state" "vpc" {
 data "aws_secretsmanager_secret" "secrets" {
   name = "${var.ENV}-env"
 }
+data "aws_secretsmanager_secret_version" "secrets" {
+  secret_id = data.aws_secretsmanager_secret.secrets.id
+}
 
 output "secrets" {
-  value = data.aws_secretsmanager_secret.secrets
+  value = jasoncode(data.aws_secretsmanager_secret_version.secrets.secret_string["SSH_USER"])
 }
