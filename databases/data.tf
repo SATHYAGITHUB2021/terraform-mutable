@@ -25,5 +25,5 @@ data "aws_secretsmanager_secret_version" "secrets" {
 }
 
 output "secrets" {
-  value = jasoncode(data.aws_secretsmanager_secret_version.secrets.secret_string["SSH_USER"])
+  value = jasoncode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"]
 }
