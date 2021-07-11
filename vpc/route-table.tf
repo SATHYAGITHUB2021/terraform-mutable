@@ -3,7 +3,7 @@ resource "aws_route_table" "public-rt" {
 
   route {
     vpc_peering_connection_id = aws_vpc_peering_connection.peer-connection.id
-    cidr_block = var.DEFAULT_VPC_ID
+    cidr_block = var.DEFAULT_VPC_CIDR
   }
 
   tags = {
@@ -16,7 +16,7 @@ resource "aws_route_table" "private-rt" {
 
   route {
     vpc_peering_connection_id = aws_vpc_peering_connection.peer-connection.id
-    cidr_block = var.DEFAULT_VPC_ID
+    cidr_block = var.DEFAULT_VPC_CIDR
   }
 
   tags = {
