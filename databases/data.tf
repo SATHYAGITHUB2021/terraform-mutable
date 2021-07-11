@@ -1,21 +1,9 @@
-data "aws_ami" "example" {
-  executable_users = ["self"]
+data "aws_ami" "centos7" {
   most_recent      = true
-  name_regex       = "^myami-\\d{3}"
-  owners           = ["self"]
+  name_regex       = "^Centos-7-DevOps-Practice"
+  owners           = ["973714476881"]
+}
 
-  filter {
-    name   = "name"
-    values = ["myami-*"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
+output "ami" {
+  value = data.aws_ami.centos7
 }
