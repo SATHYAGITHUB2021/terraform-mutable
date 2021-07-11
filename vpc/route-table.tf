@@ -30,8 +30,14 @@ resource "aws_route" "r" {
   vpc_peering_connection_id = aws_vpc_peering_connection.peer-connection.id
 }
 
-//resource "aws_route_table_association" "public-association" {
-//  count                       = length(var.SUBNET_ZONES)
-//  subnet_id                   = var.
-//  route_table_id              = aws_route_table.bar.id
-//}
+resource "aws_route_table_association" "public-association" {
+  count                       = length(var.SUBNET_ZONES)
+  subnet_id                   = element(aws_subnet.public.*.id, count.index)
+  route_table_id              = aws_route_table.public-rt.id
+}
+
+resource "aws_route_table_association" "private-association" {
+  count                       = length(var.SUBNET_ZONES)
+  subnet_id                   = element(aws_subnet.private.*.id, count.index)
+  route_table_id              = aws_route_table.private-rt.id
+}
