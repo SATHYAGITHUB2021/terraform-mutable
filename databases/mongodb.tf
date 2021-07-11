@@ -51,8 +51,8 @@ resource "null_resource" "ansible-mongo" {
   provisioner "remote-exec" {
     connection {
       host             = aws_spot_instance_request.cheap_worker.private_ip
-      user             = jasoncode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"]
-      password         = jasoncode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_PASS"]
+      user             = jasondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"]
+      password         = jasondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_PASS"]
     }
 
     inline = [
