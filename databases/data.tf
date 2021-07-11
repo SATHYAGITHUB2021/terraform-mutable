@@ -4,10 +4,6 @@ data "aws_ami" "centos7" {
   owners           = ["973714476881"]
 }
 
-output "ami" {
-  value = data.aws_ami.centos7
-}
-
 data "terraform_remote_state" "vpc" {
   backend = "s3"
 
@@ -16,4 +12,15 @@ data "terraform_remote_state" "vpc" {
     key            = "mutable/vpc/${var.ENV}/terraform.tfstate"
     region         = "us-east-1"
   }
+}
+//output "ami" {
+//  value = data.aws_ami.centos7
+//}
+
+data "aws_secretsmanager_secret" "secrets" {
+  name = "${var.ENV}-env"
+}
+
+output "secrets" {
+  value = data.aws_secretsmanager_secret.secrets
 }
