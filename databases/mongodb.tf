@@ -1,4 +1,4 @@
-resource "aws_spot_instance_request" "cheap_worker" {
+resource "aws_spot_instance_request" "mongodb" {
   ami                    = data.aws_ami.centos7.id
   spot_price             = "0.0031"
   instance_type          = "t3.micro"
@@ -12,7 +12,7 @@ resource "aws_spot_instance_request" "cheap_worker" {
 }
 
 resource "aws_security_group" "allow_mongodb" {
-  name                   = "allow_mongodg"
+  name                   = "allow_mongodb"
   description            = "AllowMongoDB"
   vpc_id                 = data.terraform_remote_state.vpc.outputs.VPC_ID
 
@@ -44,13 +44,17 @@ resource "aws_security_group" "allow_mongodb" {
   }
 }
 
-resource "null_resource" "ansible-mongo" {
+resource "null_resource" "wait" {
   provisioner "local-exec" {
-    command             = "sleep 30"
+    command = "sleep 30"
   }
+}
+
+resource "null_resource" "ansible-mongo" {
+  depends_on = [null_resource.wait]
   provisioner "remote-exec" {
     connection {
-      host             = aws_spot_instance_request.cheap_worker.private_ip
+      host             = aws_spot_instance_request.mongodb.private_ip
       user             = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"]
       password         = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_PASS"]
     }
