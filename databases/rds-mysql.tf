@@ -8,12 +8,12 @@
 //  password                    = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_PASS"]
 //  parameter_group_name        = "default.mysql5.7"
 //  skip_final_snapshot         = true
-//  db_subnet_group_name        = ""
-//  security_group_names        = []
+//  vpc_security_group_ids      = [aws_security_group.allow_rds_mysql.id]
+//  db_subnet_group_name        = aws_db_subnet_group.subnet-group.name
 //}
 //
-//resource "aws_db_subnet_group" "mysql-db-group-${var.ENV}" {
-//  name                       = "main"
+//resource "aws_db_subnet_group" "subnet-group" {
+//  name                       = "mysql-db-group-${var.ENV}"
 //  subnet_ids                 = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS
 //
 //  tags = {

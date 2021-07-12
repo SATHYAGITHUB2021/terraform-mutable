@@ -52,12 +52,14 @@ resource "null_resource" "wait" {
 }
 
 resource "null_resource" "ansible-mongo" {
-  depends_on = [null_resource.wait]
+//  depends_on = [null_resource.wait]
+  depends_on = [aws_spot_instance_request.mongodb]
   provisioner "remote-exec" {
     connection {
       host             = aws_spot_instance_request.mongodb.private_ip
       user             = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"]
       password         = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_PASS"]
+      type             = "ssh"
     }
 
     inline = [
