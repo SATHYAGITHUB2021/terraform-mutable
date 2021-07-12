@@ -47,13 +47,13 @@ resource "aws_security_group" "allow_mongodb" {
 
 resource "null_resource" "wait" {
   provisioner "local-exec" {
-    command = "sleep 30"
+    command             = "sleep 30"
   }
 }
 
 resource "null_resource" "ansible-mongo" {
-//  depends_on = [null_resource.wait]
-  depends_on = [aws_spot_instance_request.mongodb]
+  depends_on = [null_resource.wait]
+
   provisioner "remote-exec" {
     connection {
       host             = aws_spot_instance_request.mongodb.private_ip
