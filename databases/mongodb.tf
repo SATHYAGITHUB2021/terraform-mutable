@@ -1,6 +1,6 @@
 resource "aws_spot_instance_request" "mongodb" {
   ami                    = data.aws_ami.centos7.id
-  spot_price             = "0.0031"
+  spot_price             = "0.0032"
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.allow_mongodb.id]
   subnet_id              = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS[1]
@@ -67,6 +67,7 @@ resource "null_resource" "ansible-mongo" {
       "sudo pip3 install pip --upgrade",
       "sudo pip3 install ansible==4.1.0",
       "ansible-pull -i localhost, -U https://github.com/SATHYAGITHUB2021/ansible.git roboshop-pull.yml -e COMPONENT=mongodb"
+
     ]
   }
 }
