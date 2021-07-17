@@ -53,7 +53,6 @@ resource "null_resource" "wait" {
 
 resource "null_resource" "ansible-mongo" {
   depends_on = [null_resource.wait]
-
   provisioner "remote-exec" {
     connection {
       host             = aws_spot_instance_request.mongodb.private_ip
