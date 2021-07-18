@@ -12,6 +12,12 @@ resource "aws_spot_instance_request" "instances" {
     Environment          = var.ENV
   }
 }
+resource "aws_ec2_tag" "spot" {
+  count                  = var.INSTANCE_COUNT
+  resource_id            = element(aws_spot_instance_request.instances.*.spot_instance_id, count.index)
+  key                    = "Name"
+  value                  = "${var.COMPONENT}-${var.ENV}"
+}
 
 resource "aws_security_group" "allow_ec2" {
   name                   = "allow_${var.COMPONENT}"
@@ -46,18 +52,8 @@ resource "aws_security_group" "allow_ec2" {
   }
 }
 
-//resource "null_resource" "wait" {
-//  triggers              = {
-//    abc                 = timestamp()
-//  }
-//  provisioner "local-exec" {
-//    command             = "sleep 30"
-//  }
-//}
-
 resource "null_resource" "ansible-apply" {
   count                 = var.INSTANCE_COUNT
-//  depends_on            = [null_resource.wait]
   provisioner "remote-exec" {
     connection {
       host              = element(aws_spot_instance_request.instances.*.private_ip, count.index)
@@ -80,6 +76,11 @@ resource "aws_lb_target_group" "target-group" {
   port                  = var.PORT
   protocol              = "HTTP"
   vpc_id                = data.terraform_remote_state.vpc.outputs.VPC_ID
+  health_check {
+    path                = var.HEALTH_PATH
+    port                = var.PORT
+    interval            = 10
+  }
 }
 
 resource "aws_lb_target_group_attachment" "tg-attach" {
@@ -111,5 +112,3 @@ resource "aws_route53_record" "component-record" {
   ttl                  = "300"
   records              = [var.LB_DNSNAME]
 }
-
-#madhu fault

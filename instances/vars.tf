@@ -7,4 +7,5 @@ variable "INSTANCE_COUNT" {}
 variable "LB_ARN"         {}
 variable "LB_DNSNAME"     {}
 variable "LB_RULE_WEIGHT" {}
-variable "LISTENER_ARN" {}
+variable "LISTENER_ARN"   {}
+variable "HEALTH_PATH" {}
