@@ -79,7 +79,7 @@ resource "aws_lb_target_group" "target-group" {
   name                  = "${var.COMPONENT}-${var.ENV}"
   port                  = var.PORT
   protocol              = "HTTP"
-  vpc_id                = data.terraform_remote_state.vpc.id
+  vpc_id                = data.terraform_remote_state.vpc.outputs.VPC_ID
 }
 
 resource "aws_lb_target_group_attachment" "tg-attach" {
