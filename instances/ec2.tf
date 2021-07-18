@@ -61,8 +61,8 @@ resource "null_resource" "ansible-apply" {
   provisioner "remote-exec" {
     connection {
       host              = element(aws_spot_instance_request.instances.*.private_ip, count.index)
-      user              = centos
-      password          = DevOps321
+      user              = "centos"
+      password          = "DevOps321"
     }
 
     inline = [
