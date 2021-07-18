@@ -100,7 +100,7 @@ resource "aws_lb_listener_rule" "static" {
 
   condition {
     host_header {
-      values            = ["${var.COMPONENT}-${var.COMPONENT}.roboshop.internal"]
+      values            = ["${var.COMPONENT}-${var.ENV}.roboshop.internal"]
     }
   }
 }
