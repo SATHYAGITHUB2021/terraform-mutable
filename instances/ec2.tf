@@ -46,18 +46,18 @@ resource "aws_security_group" "allow_ec2" {
   }
 }
 
-resource "null_resource" "wait" {
-  triggers              = {
-    abc                 = timestamp()
-  }
-  provisioner "local-exec" {
-    command             = "sleep 30"
-  }
-}
+//resource "null_resource" "wait" {
+//  triggers              = {
+//    abc                 = timestamp()
+//  }
+//  provisioner "local-exec" {
+//    command             = "sleep 30"
+//  }
+//}
 
 resource "null_resource" "ansible-apply" {
   count                 = var.INSTANCE_COUNT
-  depends_on            = [null_resource.wait]
+//  depends_on            = [null_resource.wait]
   provisioner "remote-exec" {
     connection {
       host              = element(aws_spot_instance_request.instances.*.private_ip, count.index)
