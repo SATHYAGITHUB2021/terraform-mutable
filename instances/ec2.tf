@@ -74,3 +74,39 @@ resource "null_resource" "ansible-apply" {
     ]
   }
 }
+
+resource "aws_lb_target_group" "target-group" {
+  name                  = "${var.COMPONENT}-${var.ENV}"
+  port                  = var.PORT
+  protocol              = "HTTP"
+  vpc_id                = data.terraform_remote_state.vpc.id
+}
+
+resource "aws_lb_target_group_attachment" "tg-attach" {
+  count                 = var.INSTANCE_COUNT
+  target_group_arn      = aws_lb_target_group.target-group.arn
+  target_id             = element(aws_spot_instance_request.instances.*.spot_instance_id, count.index)
+  port                  = var.PORT
+}
+
+resource "aws_lb_listener_rule" "static" {
+  listener_arn          = var.LB_ARN
+  priority              = var.LB_RULE_WEIGHT
+
+  action {
+    type                = "forward"
+    target_group_arn    = aws_lb_target_group.target-group.arn
+  }
+
+  condition {
+    path_pattern {
+      values            = ["/static/*"]
+    }
+  }
+
+  condition {
+    host_header {
+      values            = ["${var.COMPONENT}-${var.COMPONENT}.roboshop.internal"]
+    }
+  }
+}
