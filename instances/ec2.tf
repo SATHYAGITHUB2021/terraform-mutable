@@ -61,8 +61,8 @@ resource "null_resource" "ansible-apply" {
   provisioner "remote-exec" {
     connection {
       host              = element(aws_spot_instance_request.instances.*.private_ip, count.index)
-      user              = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"]
-      password          = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_PASS"]
+      user              = centos
+      password          = DevOps321
     }
 
     inline = [
@@ -106,7 +106,7 @@ resource "aws_lb_listener_rule" "static" {
 }
 resource "aws_route53_record" "component-record" {
   zone_id              = data.terraform_remote_state.vpc.outputs.HOSTED_ZONE_ID
-  name                 = "${var.COMPONENT}-${var.COMPONENT}.roboshop.internal"
+  name                 = "${var.COMPONENT}-${var.ENV}.roboshop.internal"
   type                 = "CNAME"
   ttl                  = "300"
   records              = [var.LB_DNSNAME]
